@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import re
+import os
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 
 app = FastAPI()
@@ -95,3 +96,8 @@ def run_inference(question):
 def generate_sql(request: QueryRequest):
     sql_query = run_inference(request.question)
     return {"sql_query": sql_query}
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
